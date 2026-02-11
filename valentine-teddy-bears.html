@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Be My Valentine? 🧸🐼</title>
     <style>
         :root {
@@ -17,6 +17,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -26,213 +27,164 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-        }
-
-        /* Floating Animation Elements */
-        .floating-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .float-item {
-            position: absolute;
-            opacity: 0.6;
-            animation: floatUp 7s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+            overflow: hidden; /* Prevents scrolling when button moves */
+            position: relative;
         }
 
         .main-card {
             background: rgba(255, 255, 255, 0.95);
             width: 90%;
-            max-width: 500px;
-            padding: 2.5rem;
-            border-radius: 40px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
             z-index: 10;
             border: 4px solid var(--primary-pink);
+            position: relative;
         }
 
         .bear-container {
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 1.5rem;
-            position: relative;
+            width: 100%;
+            height: 180px;
+            margin-bottom: 1rem;
         }
 
         .bear-container img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 20px;
         }
 
         h1 {
             color: var(--bear-brown);
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
 
         .btn-group {
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Stacked for better mobile hit targets */
             align-items: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
-            min-height: 150px;
+            gap: 1rem;
+            margin-top: 1.5rem;
             position: relative;
         }
 
         .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.4rem;
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+            width: 100%;
+            max-width: 200px;
         }
 
         .btn-yes {
             background: var(--deep-rose);
             color: white;
-            z-index: 100;
+            order: 1; /* Keeps Yes on top */
         }
 
         .btn-no {
             background: #cbd5e0;
             color: #4a5568;
-            position: relative;
+            order: 2;
+            position: relative; /* Changed from absolute to prevent initial jump */
         }
 
-        #success-content {
-            display: none;
+        /* Floating elements */
+        .float-item {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 5s linear infinite;
         }
 
-        .celebration-gif {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 20px;
-            margin-bottom: 1.5rem;
+        @keyframes floatUp {
+            0% { transform: translateY(110vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh); opacity: 0; }
         }
 
-        .love-text {
-            color: var(--deep-rose);
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 1rem;
-        }
+        #success-content { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="floating-container" id="floatContainer"></div>
+    <div id="floatContainer"></div>
 
-    <div class="main-card">
+    <div class="main-card" id="card">
         <div id="question-content">
             <div class="bear-container">
-                <img id="main-gif" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3Nndm9tbmZ6YmJ6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L4lvBpHWk_R2F3YvTo/giphy.gif" alt="Asking bear">
+                <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3Nndm9tbmZ6YmJ6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L4lvBpHWk_R2F3YvTo/giphy.gif" alt="Asking bear">
             </div>
             <h1 id="title-text">Will you be my Valentine?</h1>
-            <p id="subtitle-text">I've been waiting to ask you... 🌹</p>
+            <p>I've been waiting to ask you... 🌹</p>
 
-            <div class="btn-group" id="btnGroup">
+            <div class="btn-group">
                 <button class="btn btn-yes" id="yesBtn" onclick="onYes()">Yes! 💖</button>
-                <button class="btn btn-no" id="noBtn" onmouseover="onNoHover()">No</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
             </div>
         </div>
 
         <div id="success-content">
-            <img class="celebration-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXNueXNueXNueXNueXNueXNueXNueXNueXNueXNueSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/K97baM6SleV7q/giphy.gif" alt="Happy panda and bear">
-            <h1 style="color: var(--deep-rose);">YAYYY! I LOVE YOU! 🐼❤️🧸</h1>
-            <div class="love-text">See you on the 14th, my favorite person!</div>
+            <img style="width:100%; border-radius:15px;" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NueXNueXNueXNueXNueXNueXNueXNueXNueXNueXNueSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/K97baM6SleV7q/giphy.gif">
+            <h1 style="color: var(--deep-rose); margin-top:1rem;">YAYYY! ❤️</h1>
+            <p>See you on the 14th!</p>
         </div>
     </div>
 
     <script>
-        const floatContainer = document.getElementById('floatContainer');
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const mainGif = document.getElementById('main-gif');
-        const titleText = document.getElementById('title-text');
-
+        const card = document.getElementById('card');
         let noCount = 0;
-        const noMessages = [
-            "Are you sure?",
-            "Really sure??",
-            "Panda is crying... 🥺",
-            "Bear is sad... 🥺",
-            "Don't do this to us!",
-            "I'm gonna cry...",
-            "Give it another thought!",
-            "Last chance!",
-            "You're breaking my heart 💔"
-        ];
 
-        // Create background floating items
-        function initFloating() {
-            const items = ['❤️', '💖', '🧸', '🐼', '✨'];
-            for(let i=0; i<20; i++) {
-                setTimeout(() => {
-                    const el = document.createElement('div');
-                    el.className = 'float-item';
-                    el.textContent = items[Math.floor(Math.random() * items.length)];
-                    el.style.left = Math.random() * 100 + 'vw';
-                    el.style.animationDelay = Math.random() * 5 + 's';
-                    floatContainer.appendChild(el);
-                }, i * 300);
-            }
-        }
-        initFloating();
-
-        function onNoHover() {
+        function moveButton() {
             noCount++;
             
-            // Move No Button
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth) - (window.innerWidth/2);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight) - (window.innerHeight/2);
+            // 1. Move the button but keep it visible on screen
+            const padding = 20;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
             
-            // Make Yes Button bigger
-            const currentScale = 1 + (noCount * 0.2);
-            yesBtn.style.transform = `scale(${currentScale})`;
+            // Random position within the viewport
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
 
-            // Make No Button smaller
-            const noScale = Math.max(0.3, 1 - (noCount * 0.1));
-            noBtn.style.transform = `scale(${noScale})`;
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
 
-            // Change Text
-            if (noCount < noMessages.length) {
-                noBtn.innerText = noMessages[noCount];
-            } else {
-                noBtn.style.display = 'none';
-            }
+            // 2. Make Yes Button bigger
+            const yesScale = 1 + (noCount * 0.15);
+            yesBtn.style.transform = `scale(${yesScale})`;
 
-            // Change Gif to Sad Panda
-            mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3Nndm9tbmZ6YmJ6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/OPU6wUKARAOztu6T2P/giphy.gif";
+            // 3. Update Gif to sad version
+            mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueXNueXNueXNueXNueXNueXNueXNueXNueXNueXNueSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/OPU6wUKARAOztu6T2P/giphy.gif";
         }
 
         function onYes() {
             document.getElementById('question-content').style.display = 'none';
             document.getElementById('success-content').style.display = 'block';
-            
-            // Intense heart explosion
-            for(let i=0; i<50; i++) {
+            createHearts();
+        }
+
+        function createHearts() {
+            for(let i=0; i<30; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'float-item';
                 heart.textContent = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 1) + 's';
-                floatContainer.appendChild(heart);
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.getElementById('floatContainer').appendChild(heart);
             }
         }
     </script>
